@@ -44,7 +44,7 @@ def findNumOfSubServer(st: str):
 def rateTuples(bigTuple :str):
     s = bigTuple.find("(")
     m = bigTuple.find(",")
-    e = bigTuple.find(")")
+    e = bigTuple.find(")0")
     smallTuple1 = (int(bigTuple[s+2:m]), int(bigTuple[m+1:e]))
     s = bigTuple.find("(",e)
     m = bigTuple.find(",",s)
@@ -55,27 +55,6 @@ def rateTuples(bigTuple :str):
 
 if __name__ == '__main__':
     loc1, loc2 = rateTuples('((1200,600),(0,600))')
-    print(loc1, " , ", loc2)
-    print(findNumOfSubServer("Hello server1"))
-    d = {'a': [1], 'b': [1, 2], 'c': [], 'd': []}
-    print(list(d))
-    for i in d:
-        print(i)
-        #if not d[i]:
-            #d.pop(i)
-    print(d)
-    #main()
-    # print(create_pos('(,100)'))
-    # t = '(54530, (100,100))'
-    # print(str(t))
-    # ad, pos = toTuple(t)
-    # print(ad, ", ", pos)
-    # print(len(str(ad)))
-    # q = queue.Queue()
-    # q.put(((875, 699), ('127.0.0.1', 51719)))
-    # print(list(q.queue))
-    # if ((875, 699), ('127.0.0.1', 51719)) not in q.queue:
-    #     q.put(((875, 699), ('127.0.0.1', 51719)))
-    # print(list(q.queue))
-    # for i in range(len(q.queue)):
-    #     print(q.queue[i])
+
+
+
