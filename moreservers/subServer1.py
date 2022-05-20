@@ -57,7 +57,10 @@ class threadServer(threading.Thread):
         while True:
             print("in")
             print(f"rateX: {self.rateX}, rateY: {self.rateY}")
-            (data, addr) = self.server_socket.recvfrom(1024)
+            try:
+                (data, addr) = self.server_socket.recvfrom(1024)
+            except:
+                None
             print("data: ", data.decode())
             d = data.decode()
 
@@ -78,11 +81,6 @@ class threadServer(threading.Thread):
                 self.counter += 1
                 self.players.append(addr)
 
-                #making and sending random backstage position for the new player:
-                #cPosition = self.makePosition()
-                #self.players_locations[addr] = cPosition
-                #print("PlAYERS: ", self.players_locations)
-                #self.server_socket.sendto((str(cPosition)).encode(), addr)
 
                 c = listenToClient(addr, self, self.q)
                 c.start()
@@ -175,19 +173,15 @@ class calc(threading.Thread):
         return math.sqrt(x+y)
 
     def run(self):
-        #print("current locations: ", self.locations)
         for a in list(self.locations):
-            #print("a: ", a)
             loc1 = self.locations[a]
             for b in list(self.locations):
                 if b is not a:
                     loc2 = self.locations[b]
                     dis = self.calc_distanse(loc1, loc2)
-                    #print("max dis: ", math.sqrt(720000), "current dis = ", dis)
                     if dis <= math.sqrt(180000) and ((b[1], loc2), a) not in self.q.queue:
 
                         self.q.put(((b[1], loc2), a))
-                        print("q: ", list(self.q.queue))
                         time.sleep(0.1)
 
 

@@ -16,7 +16,7 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 PURPLE = (153, 153, 255)
-IMAGE = 'C:/Users/yossi/syber/map2.jfif'
+
 REFRESH_RATE = 80
 LEFT = 1
 SCROLL = 2
@@ -29,7 +29,6 @@ clientNumber = 0
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, center):
         pygame.sprite.Sprite.__init__(self)
-        #threading.Thread.__init__(self)
         self.image = pygame.Surface((50, 50))
         self.image.fill(color)
         self.rect = self.image.get_rect()
@@ -51,15 +50,10 @@ class Player(pygame.sprite.Sprite):
     def right(self, sprites, myPos, locs):
         for s in sprites:
             if s is not self:
-                #drawScreen(screen, sprites)
-                #print("before: ", s.rect.x)
-                print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$m s.center: ", s.rect.center)
                 loc = s.rect.center
                 sprites.add(Player((2, 255, 255), s.rect.center))
                 if s.rect.center[0] - VELOCITY >= 0:
                     sprites.add(Player(RED, (s.rect.center[0] - VELOCITY, s.rect.center[1])))
-                #sprites.remove(s)
-                #print("after: ", s.rect.x)
                 for i in locs:
                     if locs[i] == loc:
                         locs[i] = (s.rect.center[0] - VELOCITY, s.rect.center[1])

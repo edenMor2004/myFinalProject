@@ -63,7 +63,10 @@ class threadServer(threading.Thread):
         while True:
             print("in")
             print(f"rateX: {self.rateX}, rateY: {self.rateY}")
-            (data, addr) = self.server_socket.recvfrom(1024)
+            try:
+                (data, addr) = self.server_socket.recvfrom(1024)
+            except:
+                None
             print("data: ", data.decode())
             d = data.decode()
             if "time" in d:

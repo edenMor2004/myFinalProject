@@ -41,7 +41,7 @@ class threadServer(threading.Thread):
 
         #area of sub servers in the beggining
         self.subServers = {1:[((0,600),(0,600))], 2:[((600,1200), (0,600))], 3:[((0,600), (600,1200))], 4:[((600,1200), (600,1200))]}
-        s = sendToClient(self.q, self.server_socket, self.players_locations.values(), self.addresses)
+        #s = sendToClient(self.q, self.server_socket, self.players_locations.values(), self.addresses)
         # s.start()
 
     def makePosition(self):
@@ -248,17 +248,7 @@ class threadServer(threading.Thread):
             return 3
         if x >= 600 and x <= 1200 and y >= 600 and y <= 1200:
             return 4
-            #     c = listenToClient(addr, self, self.q, cPosition)
-            #     c.start()
-            # else:
-            #     position = toTuple(data.decode())
-            #     #print("position i got from client: ", position)
-            #     self.players_locations[addr] = position
-            #     #print("locations: ", self.players_locations)
-            # for i in self.players_locations.keys():
-            #     self.addresses.put(i)
-            # c = calc(self.players_locations, self.q)
-            # c.start()
+
 
 def findNumOfSubServer(st: str):
     i = st.find("server")
@@ -277,85 +267,7 @@ def addr_to_tuple(st: str):
     loc = (int(st[start + 1:mid]), int(st[mid + 1: en]))
     return addr, loc
 
-class sendToClient(threading.Thread):
-    def __init__(self, q, server, players, addr):
-        #threading.Thread.__init__(self)
-        super(sendToClient, self).__init__()
-        self.q = q
-        self.server = server
-        self.addr = players
-        self.addresses = addr
-        self.count = 0
 
-    def run(self):
-        print("sending")
-        while True:
-            if not self.q.empty():
-                message = self.q.get()
-                msg = message[0]
-                addr = message[1]
-                print("sending: ", msg, "to: ", addr)
-                self.server.sendto((str(msg)).encode(), addr)
-                print("q after sending: ", list(self.q.queue))
-                time.sleep(0.1)
-
-class listenToServer(threading.Thread):
-    def __init__(self, addr, Tserver, num):
-        threading.Thread.__init__(self)
-        #self.client = client
-        #self.location = loc
-        self.addr = addr
-        self.server = Tserver
-        self.myNum = num
-        #self.posX = random.randint(0, WINDOW_WIDTH)
-        #self.posY = random.randint(0, WINDOW_HEIGHT)
-        self.running = True
-        #self.players = Tserver.players_locations
-        #self.Tserver = Tserver
-        #self.q = q
-
-    def run(self):
-
-        #self.server.sendto("welcome to game".encode(), self.addr)
-        #print("addr: ", self.addr)
-        while self.running:
-            start = time.perf_counter()
-            self.server.sendto("time".encode(), self.addr)
-            (data, addr) = self.server.recvfrom(1024)
-            if addr == self.addr:
-                responseTime = time.perf_counter() - start
-                print(self.myNum, " response time: ", responseTime)
-            time.sleep(0.5)
-
-
-class calc(threading.Thread):
-    def __init__(self, playersLocations, q):
-        threading.Thread.__init__(self)
-        self.locations = playersLocations
-        self.q = q
-
-    def calc_distanse(self, loc1, loc2):
-        x = math.pow((loc1[0] - loc2[0]), 2)
-        y = math.pow((loc1[1] - loc2[1]), 2)
-        return math.sqrt(x+y)
-
-    def run(self):
-        #print("current locations: ", self.locations)
-        for a in list(self.locations):
-            #print("a: ", a)
-            loc1 = self.locations[a]
-            for b in list(self.locations):
-                if b is not a:
-                    loc2 = self.locations[b]
-                    dis = self.calc_distanse(loc1, loc2)
-                    #print("max dis: ", math.sqrt(720000), "current dis = ", dis)
-                    if dis <= math.sqrt(180000) and ((b[1], loc2), a) not in self.q.queue:
-
-                        self.q.put(((b[1], loc2), a))
-                        print("q: ", list(self.q.queue))
-                        time.sleep(0.1)
-                        #self.q.put((b, a))
-                        #time.sleep(0.1)
 
 if __name__ == '__main__':
         s = threadServer(IP, PORT, outgoingQ)
